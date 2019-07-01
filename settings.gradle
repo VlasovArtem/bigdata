@@ -1,3 +1,4 @@
 rootProject.name = 'bigdata'
 include 'hadoop-example'
+include 'spark-example'
 
