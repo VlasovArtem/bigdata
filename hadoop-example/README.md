@@ -141,7 +141,7 @@ Hortonworks Sandbox for Hadoop - https://www.cloudera.com/downloads/hortonworks-
 
 # Ambari
 
-# Hot execute Hadoop Job
+# How to execute Hadoop Job
 1. Build hadoop-example module - ```gradle clean build```
 2. Copy jar to an HDFS
 3. Run hadoop command - ```hadoop jar <path_to_the_jar> <path_to_the_movie_rating_data> <output_folder_path>```
