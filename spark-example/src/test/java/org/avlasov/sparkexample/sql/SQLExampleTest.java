@@ -43,13 +43,13 @@ public class SQLExampleTest {
         for (Row row : topWorstMovies) {
             Assert.assertTrue(row.getLong(row.fieldIndex("count")) > 10);
         }
-//        for (Row row : topWorstMovies) {
-//            int movieID = row.getInt(row.fieldIndex(DataMapper.MOVIE_ID_COLUMN_NAME));
-//            System.out.printf("Movie '%s' (id = %d) with average rating = %.1f and total ratings = %d%n",
-//                    movies.get(movieID), movieID,
-//                    row.getDouble(row.fieldIndex("avg(rating)")),
-//                    row.getLong(row.fieldIndex("count")));
-//        }
+        for (Row row : topWorstMovies) {
+            int movieID = row.getInt(row.fieldIndex(DataMapper.MOVIE_ID_COLUMN_NAME));
+            System.out.printf("Movie '%s' (id = %d) with average rating = %.1f and total ratings = %d%n",
+                    movies.get(movieID), movieID,
+                    row.getDouble(row.fieldIndex("avg(rating)")),
+                    row.getLong(row.fieldIndex("count")));
+        }
     }
 
 }

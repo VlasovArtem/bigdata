@@ -26,7 +26,7 @@ import static org.avlasov.sparkexample.util.DataMapper.USER_ID_COLUMN_NAME;
 
 public class SQLExample extends AbstractExample  {
 
-    protected SQLExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+    public SQLExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 
