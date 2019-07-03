@@ -25,7 +25,7 @@ public class MainMLLibExample {
 
         Row[] topRecommendations = mlLibExample.findTopRecommendations(userID);
 
-        System.out.printf("User (id = %d) top 20 recommendations%n", userID);
+        System.out.printf("%nUser (id = %d) top 20 recommendations%n", userID);
         for (Row topRecommendation : topRecommendations) {
             System.out.printf("%s - prediction %.1f%n", moviesData.get(topRecommendation.getAs(DataMapper.MOVIE_ID_COLUMN_NAME)),
                     (float) topRecommendation.getAs(new ALS().getPredictionCol()));

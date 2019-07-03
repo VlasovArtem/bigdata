@@ -31,7 +31,8 @@ public class MLLibExample extends AbstractExample {
     }
 
     public List<Row> findUserRatings(int userID) {
-        try (SparkSession sparkSession = getSparkSession()) {
+        SparkSession sparkSession = getSparkSession();
+        try {
             JavaRDD<Row> rows = sparkSession.read().text(movieRatingsFilePath).javaRDD();
             JavaRDD<Row> ratingsRDD = rows.map(mapRatingLineToRowRating());
 
@@ -39,11 +40,14 @@ public class MLLibExample extends AbstractExample {
 
             //or ratings.filter("userID = 0")
             return ratings.filter(new Column(USER_ID_COLUMN_NAME).equalTo(userID)).collectAsList();
+        } finally {
+            sparkSession.stop();
         }
     }
 
     public Row[] findTopRecommendations(int userID) {
-        try (SparkSession sparkSession = getSparkSession()) {
+        SparkSession sparkSession = getSparkSession();
+        try {
             JavaRDD<Row> rows = sparkSession.read().text(movieRatingsFilePath).javaRDD();
             JavaRDD<Row> ratingsRDD = rows.map(mapRatingLineToRowRating());
 
@@ -59,6 +63,8 @@ public class MLLibExample extends AbstractExample {
             Dataset<Row> recommendations = model.transform(popularMovies);
 
             return (Row[]) recommendations.sort(new Column(model.getPredictionCol()).desc()).take(20);
+        } finally {
+            sparkSession.stop();
         }
     }
 

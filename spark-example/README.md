@@ -53,6 +53,9 @@ Where **link_to_u.data_file** or **link_to_u.item_file** can be link to HDFS or 
 
 And **main_class** can be: 
 * org.avlasov.sparkexample.simple.MainMoviesExample
-* org.avlasov.sparkexample.sql.MainSQLExample - for this example make sure that you are using Spark2. Run this command ```spark-submit --version```, if you are using first version, run next command ```export SPARK_MAJOR_VERSION=2```
+* org.avlasov.sparkexample.sql.MainSQLExample
+* org.avlasov.sparkexample.mllib.MainMLLibExample
 
-Please note: If you are running MainSQLExample, then files will be searching on hdfs, but on local Hadoop cluster. In this case **hdfs:///user/maria_dev/ml-100k/u.data** and **ml-100k/u.data** is the reference to the same file.
+For **MainSQLExample** and **MainMLLibExample** make sure that you are using Spark2. Run this command ```spark-submit --version```, if you are using first version, run next command ```export SPARK_MAJOR_VERSION=2``` 
+
+Please note: If you are running **MainSQLExample** and **MainMLLibExample**, then files will be searching on hdfs, but on local Hadoop cluster. In this case **hdfs:///user/maria_dev/ml-100k/u.data** and **ml-100k/u.data** is the reference to the same file.
