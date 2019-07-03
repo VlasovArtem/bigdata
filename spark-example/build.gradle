@@ -5,6 +5,10 @@ plugins {
 group 'org.avlasov'
 version '1.0-SNAPSHOT'
 
+project.ext {
+    sparkVersion = '2.4.3'
+}
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -12,7 +16,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.apache.spark', name: 'spark-core_2.12', version: '2.4.3'
-    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: '2.4.3'
+    compile group: 'org.apache.spark', name: 'spark-core_2.12', version: sparkVersion
+    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: sparkVersion
+    compile group: 'org.apache.spark', name: 'spark-mllib_2.12', version: sparkVersion
+
     compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-scala_2.12', version: '2.9.5'
 }

@@ -1,4 +1,4 @@
-package org.avlasov.sparkexample.simple.entity;
+package org.avlasov.sparkexample.entity;
 
 import lombok.Builder;
 import lombok.Data;

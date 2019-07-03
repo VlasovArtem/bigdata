@@ -16,6 +16,22 @@ Resilient Distributed Dataset
 * Creates RDD
 * The spark shell creates a "sc" object for you
 
+## Spark SQL
+Extends RDD to a "DataFrame" object.
+DataFrame is DataSet of Row objects (in Spark 2.0)
+Works over Spark Thrift Server
+It is possible to define custom function (UDF - User-defines functions) and use them in SQL queries/
+
+DataFrame:
+1. Contain Row objects
+2. Can run SQL queries
+3. Has a schema (leading to more efficient storage)
+4. Read and write to JSON, Hive, parquet
+5. Communicates with JDBC/ODBC, Tableau
+
+## MLLib
+Apache Spark Machine Learning library
+
 ## Materials
 ### Books
 https://www.manning.com/books/spark-in-action-second-edition
@@ -29,8 +45,14 @@ https://www.udemy.com/apache-spark-for-java-developers/
 3. Copy u.data, u.item (Test data can be found by the link https://grouplens.org/datasets/ (ml-100k.zip)) to the HDFS
 4. Execute command 
 
-```spark-submit --class org.avlasov.sparkexample.simple.MainMoviesExample spark-example-1.0-SNAPSHOT.jar <link_to_u.data_file> <link_to_u.item_file>```
+```spark-submit --class <main_class> spark-example-1.0-SNAPSHOT.jar <link_to_u.data_file> <link_to_u.item_file>```
 
 Where **link_to_u.data_file** or **link_to_u.item_file** can be link to HDFS or file on local hadoop env, for example:
 * hdfs:///user/maria_dev/ml-100k/u.data 
 * ./u.item
+
+And **main_class** can be: 
+* org.avlasov.sparkexample.simple.MainMoviesExample
+* org.avlasov.sparkexample.sql.MainSQLExample - for this example make sure that you are using Spark2. Run this command ```spark-submit --version```, if you are using first version, run next command ```export SPARK_MAJOR_VERSION=2```
+
+Please note: If you are running MainSQLExample, then files will be searching on hdfs, but on local Hadoop cluster. In this case **hdfs:///user/maria_dev/ml-100k/u.data** and **ml-100k/u.data** is the reference to the same file.

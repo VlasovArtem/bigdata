@@ -1,6 +1,6 @@
 package org.avlasov.sparkexample.simple;
 
-import org.avlasov.sparkexample.simple.util.DataMapper;
+import org.avlasov.sparkexample.util.DataMapper;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Test;
 import scala.Tuple2;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class MoviesExampleTest {
 
     private MoviesExample moviesExample =
-            new MoviesExample(new DataMapper(), "../data/movie-ratings.txt", "../data/movie-data.txt");
+            new MoviesExample("../data/movie-ratings.txt", "../data/movie-data.txt", new DataMapper());
 
     @Test
     public void findWorstMovie() {

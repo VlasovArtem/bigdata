@@ -1,10 +1,14 @@
-package org.avlasov.sparkexample.simple.util;
+package org.avlasov.sparkexample.util;
 
 import org.apache.spark.api.java.function.Function;
-import org.avlasov.sparkexample.simple.entity.Movie;
-import org.avlasov.sparkexample.simple.entity.Rating;
+import org.avlasov.sparkexample.entity.Movie;
+import org.avlasov.sparkexample.entity.Rating;
 
 public class DataMapper {
+
+    public static final String USER_ID_COLUMN_NAME = "userID";
+    public static final String MOVIE_ID_COLUMN_NAME = "movieID";
+    public static final String RATING_COLUMN_NAME = "rating";
 
     public Function<String, Rating> mapToRating() {
         return line -> {

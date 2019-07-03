@@ -3,23 +3,17 @@ package org.avlasov.sparkexample.simple;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.avlasov.sparkexample.simple.entity.Rating;
-import org.avlasov.sparkexample.simple.util.DataMapper;
+import org.avlasov.sparkexample.main.AbstractExample;
+import org.avlasov.sparkexample.entity.Rating;
+import org.avlasov.sparkexample.util.DataMapper;
 import scala.Tuple2;
 
 import java.util.List;
-import java.util.Map;
 
-public class MoviesExample {
+public class MoviesExample extends AbstractExample {
 
-    private final DataMapper dataMapper;
-    private final String ratingsFileLink;
-    private final String moviesFileLink;
-
-    public MoviesExample(DataMapper dataMapper, String ratingsFileLink, String moviesFileLink) {
-        this.dataMapper = dataMapper;
-        this.ratingsFileLink = ratingsFileLink;
-        this.moviesFileLink = moviesFileLink;
+    protected MoviesExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+        super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 
     public List<Tuple2<Integer, Integer>> findTop10WorstMovies() {
@@ -35,15 +29,9 @@ public class MoviesExample {
         }
     }
 
-    public Map<Integer, String> readMovies() {
-        try (JavaSparkContext javaSparkContext = new JavaSparkContext(getSparkConfig())) {
-            return javaSparkContext.textFile(moviesFileLink)
-                    .mapToPair(line -> {
-                        String[] split = line.split("\\|");
-                        return new Tuple2<>(Integer.parseInt(split[0]), split[1]);
-                    })
-                    .collectAsMap();
-        }
+    @Override
+    public JavaSparkContext getJavaSparkContext() {
+        return new JavaSparkContext(getSparkConfig());
     }
 
     private SparkConf getSparkConfig() {
@@ -53,7 +41,7 @@ public class MoviesExample {
     }
 
     private JavaRDD<Rating> readRatings(JavaSparkContext javaSparkContext) {
-        return javaSparkContext.textFile(ratingsFileLink)
+        return javaSparkContext.textFile(movieRatingsFilePath)
                 .map(dataMapper.mapToRating());
     }
 
