@@ -11,11 +11,11 @@ public class MainMoviesExample {
     public static void main(String[] args) {
         MoviesExample moviesExample = new MoviesExample( args[0], args[1], new DataMapper());
 
-        List<Tuple2<Integer, Integer>> top10WorstMovies = moviesExample.findTop10WorstMovies();
+        List<Tuple2<Double, Integer>> top10WorstMovies = moviesExample.findTop10WorstMovies();
         Map<Integer, String> integerStringMap = moviesExample.readMovies();
 
-        for (Tuple2<Integer, Integer> top10WorstMovie : top10WorstMovies) {
-            System.out.printf("%s, %d", integerStringMap.get(top10WorstMovie._2()), top10WorstMovie._1());
+        for (Tuple2<Double, Integer> top10WorstMovie : top10WorstMovies) {
+            System.out.printf("%s, %.1f", integerStringMap.get(top10WorstMovie._2()), top10WorstMovie._1());
         }
     }
 

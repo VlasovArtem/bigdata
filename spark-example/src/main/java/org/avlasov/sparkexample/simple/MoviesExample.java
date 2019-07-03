@@ -16,14 +16,28 @@ public class MoviesExample extends AbstractExample {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 
-    public List<Tuple2<Integer, Integer>> findTop10WorstMovies() {
+    public List<Tuple2<Double, Integer>> findTop10WorstMovies() {
         try (JavaSparkContext javaSparkContext = new JavaSparkContext(getSparkConfig())) {
             return readRatings(javaSparkContext)
                     .mapToPair(rating -> new Tuple2<>(rating.getMovieId(), new Tuple2<>(rating.getRating(), 1)))
                     .reduceByKey((movieToRating1, movieToRating2) ->
                             new Tuple2<>(movieToRating1._1() + movieToRating2._1(), movieToRating1._2() + movieToRating2._2()))
                     .mapToPair(movieToRatingTotal ->
-                            new Tuple2<>(movieToRatingTotal._2()._1() / movieToRatingTotal._2()._2(), movieToRatingTotal._1()))
+                            new Tuple2<>(movieToRatingTotal._2()._1() / (double) movieToRatingTotal._2()._2(), movieToRatingTotal._1()))
+                    .sortByKey(true)
+                    .take(10);
+        }
+    }
+
+    public List<Tuple2<Double, Tuple2<Integer, Integer>>> findTop10WorstMoviesSecondSolution() {
+        try (JavaSparkContext javaSparkContext = new JavaSparkContext(getSparkConfig())) {
+            return readRatings(javaSparkContext)
+                    .mapToPair(rating -> new Tuple2<>(rating.getMovieId(), new Tuple2<>(rating.getRating(), 1)))
+                    .reduceByKey((movieToRating1, movieToRating2) ->
+                            new Tuple2<>(movieToRating1._1() + movieToRating2._1(), movieToRating1._2() + movieToRating2._2()))
+                    .filter(movieRating -> movieRating._2()._2() > 10)
+                    .mapToPair(movieToRatingTotal ->
+                            new Tuple2<>(movieToRatingTotal._2()._1() / (double) movieToRatingTotal._2()._2(), new Tuple2<>(movieToRatingTotal._1(), movieToRatingTotal._2()._2())))
                     .sortByKey(true)
                     .take(10);
         }

@@ -18,8 +18,6 @@ import org.apache.spark.sql.types.StructType;
 import org.avlasov.sparkexample.main.AbstractExample;
 import org.avlasov.sparkexample.util.DataMapper;
 
-import java.util.List;
-
 import static org.avlasov.sparkexample.util.DataMapper.MOVIE_ID_COLUMN_NAME;
 import static org.avlasov.sparkexample.util.DataMapper.RATING_COLUMN_NAME;
 import static org.avlasov.sparkexample.util.DataMapper.USER_ID_COLUMN_NAME;
@@ -28,21 +26,6 @@ public class MLLibExample extends AbstractExample {
 
     protected MLLibExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
-    }
-
-    public List<Row> findUserRatings(int userID) {
-        SparkSession sparkSession = getSparkSession();
-        try {
-            JavaRDD<Row> rows = sparkSession.read().text(movieRatingsFilePath).javaRDD();
-            JavaRDD<Row> ratingsRDD = rows.map(mapRatingLineToRowRating());
-
-            Dataset<Row> ratings = sparkSession.createDataFrame(ratingsRDD, getRatingStructType()).cache();
-
-            //or ratings.filter("userID = 0")
-            return ratings.filter(new Column(USER_ID_COLUMN_NAME).equalTo(userID)).collectAsList();
-        } finally {
-            sparkSession.stop();
-        }
     }
 
     public Row[] findTopRecommendations(int userID) {
@@ -109,7 +92,7 @@ public class MLLibExample extends AbstractExample {
         return new JavaSparkContext(getSparkSession().sparkContext());
     }
 
-    public Function<Row, Row> mapRatingLineToRowRating() {
+    private Function<Row, Row> mapRatingLineToRowRating() {
         return row -> {
             String line = row.getString(0);
             String[] split = line.split("\t");
