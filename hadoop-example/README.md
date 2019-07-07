@@ -308,8 +308,18 @@ ambari-server restart
 4. Go to Ambari UI - 127.0.0.1:8080
 5. On main page add service for MongoDB. Accept all defaults.
     * For version 2.5 Actions -> Add service -> Select MongoDB
-    * For version 3.0 three dots near Services -> Add service -> Select MongoDB 
+    * For version 3.0 three dots near Services -> Add service -> Select MongoDB
     
+##### Examples
+Add index for the field
+```
+db.users.createIndex({userId : 1})
+```
+Aggregate
+```
+db.users.aggregate([ { $group: {_id: { occupation: "$occupation"}, avgAge : { $avg: "$age" }}}])
+```
+    g
 
 ## YARN (Yet Another Resource Negotiator)
 Manages where and how resource are manages
@@ -446,6 +456,7 @@ https://www.udemy.com/the-ultimate-hands-on-hadoop-tame-your-big-data
 ## Links
 http://localhost:19888/jobhistory/app - Hadoop job history
 Hortonworks Sandbox for Hadoop - https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html
+https://hortonworks.com/tutorial/learning-the-ropes-of-the-hortonworks-sandbox/
 
 # Apache Hive
 Is translates SQL queries to MapReduce or Tez jobs on your cluster. The framework is translating SQL to the MapReduce or Tez commands. Running on the top of Hadoop YARN. SQL commands will be broken on map and reduce commands and then figure out how to execute them.
@@ -522,7 +533,12 @@ PARTITIONED BY (country STRING);
 6. Via Oozie
 
 ## Connection on Hadoop cluster
-beeline -u jdbc:hive2://localhost:10000 -n maria_dev
+
+```beeline -u jdbc:hive2://localhost:10000 -n maria_dev```
+Enter as hive user (superuser in Hive)
+```beeline -u jdbc:hive2://localhost:10000 -n hive -p hadoop```
+
+```hive```
 
 ## Examples
 All sample data can be found in https://grouplens.org/datasets/ (ml-100k.zip)
@@ -554,6 +570,25 @@ DROP VIEW topMovieIDs;
 ```
 
 # Ambari
+
+# Superset
+
+## Configure Hive
+
+[Website](https://docs.hortonworks.com/HDPDocuments/HDP3/HDP-3.1.0/integrating-hive/content/hive_visualizing_hive_data_using_superset.html)
+[PDF](https://docs.hortonworks.com/HDPDocuments/HDP3/HDP-3.0.1/integrating-hive/hive_integrating_hive_and_bi.pdf)
+
+### Hot wo get Hive link for Superset
+Example of the link
+```hive://hive@c7402:10000/default```
+Where **c7402** is name node, name of the node can be found with help command line:
+1. Connect to Hadoop via SSH
+2. Enter as root ```su root```
+3. Enter as hdfs super user ```su - hdfs```
+4. Run hdfs report ```hdfs dfsadmin -report```
+5. Find name of the live nodes in the report (in my case was 172.18.0.2:50010, I trimmed port and get **172.18.0.2**)
+
+Probably it can be found in **Ambari** in YARN Heatmap tab.
 
 # Materials
 https://sundog-education.com/hadoop-materials/
