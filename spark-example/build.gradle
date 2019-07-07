@@ -8,6 +8,7 @@ version '1.0-SNAPSHOT'
 project.ext {
     sparkVersion = '2.4.3'
     cassandraVersion = '3.11.4'
+    scalaVersion = '2.11'
 }
 
 sourceCompatibility = 1.8
@@ -27,11 +28,11 @@ jar {
 dependencies {
     compile project(":common")
 
-    compile ('org.apache.spark:spark-core_2.12:' + sparkVersion) {
+    compile ('org.apache.spark:spark-core_' + scalaVersion + ':' + sparkVersion) {
         exclude group: 'org.apache.hadoop'
     }
-    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: sparkVersion
-    compile group: 'org.apache.spark', name: 'spark-mllib_2.12', version: sparkVersion
+    compile group: 'org.apache.spark', name: 'spark-sql_' + scalaVersion, version: sparkVersion
+    compile group: 'org.apache.spark', name: 'spark-mllib_' + scalaVersion, version: sparkVersion
 
     compile group: 'com.datastax.spark', name: 'spark-cassandra-connector_2.11', version: '2.4.1'
 
@@ -39,9 +40,9 @@ dependencies {
 
     compile('com.datastax.oss:java-driver-core:4.1.0')
 
-    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-scala_2.12', version: '2.9.5'
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-scala_' + scalaVersion, version: '2.9.5'
 
-    compile group: 'org.mongodb.spark', name: 'mongo-spark-connector_2.12', version: '2.4.1'
+    compile group: 'org.mongodb.spark', name: 'mongo-spark-connector_' + scalaVersion, version: '2.4.1'
 
     testCompile group: 'org.cassandraunit', name: 'cassandra-unit', version: '3.11.2.0'
 }

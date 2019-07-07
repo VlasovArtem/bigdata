@@ -56,7 +56,7 @@ Main class: org.avlasov.sparkexample.mongodb.MainMongoDBExample
 
 Run with spark-submit
 ```shell script
-spark-submit --packages org.mongodb.spark:mongo-spark-connector:mongo-spark-connector_2.12:2.4.1 --class org.avlasov.sparkexample.mongodb.MainMongoDBExample spark-example-1.0-SNAPSHOT.jar ./ml-100k/u.data ./ml-100k/u.item ./ml-100k/u.user
+spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.11:2.4.1 --class org.avlasov.sparkexample.mongodb.MainMongoDBExample ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar ./data/movie-ratings.txt ./data/movie-data.txt ./data/users.txt
 ```
 
 
