@@ -3,15 +3,13 @@ plugins {
     id "io.freefair.lombok" version "3.7.5"
 }
 
-repositories {
-    mavenCentral()
-}
-
-subprojects {
+allprojects {
     repositories {
         mavenCentral()
     }
+}
 
+subprojects {
     apply plugin: 'java'
     apply plugin: "io.freefair.lombok"
 

@@ -2,10 +2,8 @@ plugins {
     id 'java'
 }
 
-jar {
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+project.ext {
+    hbaseVersion = '2.2.0'
 }
 
 group 'org.avlasov'
@@ -17,8 +15,15 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from project(":common").sourceSets.main.output
+}
+
 dependencies {
-    compile('org.apache.hadoop:hadoop-client:3.2.0')
-    compile('org.apache.hadoop:hadoop-hdfs:3.2.0')
-    compile('org.apache.hadoop:hadoop-mapreduce-client-common:3.2.0')
+    compile project(":common")
+
+    compile group: 'org.apache.hbase', name: 'hbase-client', version: hbaseVersion
+    compile group: 'org.apache.hbase', name: 'hbase-server', version: hbaseVersion
+    compile group: 'org.apache.hbase', name: 'hbase-common', version: hbaseVersion
+    compile group: 'org.apache.hbase', name: 'hbase-rest', version: hbaseVersion
 }
