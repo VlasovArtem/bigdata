@@ -1,6 +1,6 @@
 package org.avlasov.sparkexample.simple;
 
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class MoviesExampleTest {
 
     private MoviesExample moviesExample =
-            new MoviesExample("../data/movie-ratings.txt", "../data/movie-data.txt", new DataMapper());
+            new MoviesExample("../data/movie-ratings.txt", "../data/movie-data.txt", new SparkDataMapper());
 
     @Test
     public void findWorstMovie() {

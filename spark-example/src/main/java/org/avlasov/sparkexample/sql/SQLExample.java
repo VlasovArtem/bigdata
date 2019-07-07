@@ -14,19 +14,19 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-import org.avlasov.sparkexample.entity.Rating;
+import org.avlasov.entity.Rating;
 import org.avlasov.sparkexample.main.AbstractExample;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 
 import java.util.List;
 
-import static org.avlasov.sparkexample.util.DataMapper.MOVIE_ID_COLUMN_NAME;
-import static org.avlasov.sparkexample.util.DataMapper.RATING_COLUMN_NAME;
-import static org.avlasov.sparkexample.util.DataMapper.USER_ID_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.MOVIE_ID_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.RATING_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.USER_ID_COLUMN_NAME;
 
 public class SQLExample extends AbstractExample  {
 
-    public SQLExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+    public SQLExample(String movieRatingsFilePath, String moviesFilePath, SparkDataMapper dataMapper) {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 

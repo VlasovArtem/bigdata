@@ -39,6 +39,27 @@ https://www.manning.com/books/spark-in-action-second-edition
 https://www.udemy.com/apache-spark-course-with-java/
 https://www.udemy.com/apache-spark-for-java-developers/
 
+# Apache Spark and Cassandra
+
+Example: org.avlasov.sparkexample.cassandra.CassandraExample
+Main class: org.avlasov.sparkexample.cassandra.MainCassandraExample
+
+Run with spark-submit
+```shell script
+spark-submit --packages datastax:spark-cassandra-connector:2.0.0-M2-s_2.11 --class org.avlasov.sparkexample.cassandra.MainCassandraExample spark-example-1.0-SNAPSHOT.jar ./ml-100k/u.data ./ml-100k/u.item ./ml-100k/u.user
+```
+
+# Apache Spark and MongoDB
+
+Example: org.avlasov.sparkexample.mongodb.MongoDBExample
+Main class: org.avlasov.sparkexample.mongodb.MainMongoDBExample
+
+Run with spark-submit
+```shell script
+spark-submit --packages org.mongodb.spark:mongo-spark-connector:mongo-spark-connector_2.12:2.4.1 --class org.avlasov.sparkexample.mongodb.MainMongoDBExample spark-example-1.0-SNAPSHOT.jar ./ml-100k/u.data ./ml-100k/u.item ./ml-100k/u.user
+```
+
+
 # How execute Spark example
 1. Build spark-example module ```gradle clean build```
 2. Copy jar to HDFS local file system

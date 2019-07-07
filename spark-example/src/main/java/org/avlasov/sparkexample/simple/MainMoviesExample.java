@@ -1,6 +1,6 @@
 package org.avlasov.sparkexample.simple;
 
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 import scala.Tuple2;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map;
 public class MainMoviesExample {
 
     public static void main(String[] args) {
-        MoviesExample moviesExample = new MoviesExample( args[0], args[1], new DataMapper());
+        MoviesExample moviesExample = new MoviesExample( args[0], args[1], new SparkDataMapper());
 
         List<Tuple2<Double, Integer>> top10WorstMovies = moviesExample.findTop10WorstMovies();
         Map<Integer, String> integerStringMap = moviesExample.readMovies();

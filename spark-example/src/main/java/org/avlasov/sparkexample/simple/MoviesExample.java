@@ -3,16 +3,16 @@ package org.avlasov.sparkexample.simple;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.avlasov.entity.Rating;
 import org.avlasov.sparkexample.main.AbstractExample;
-import org.avlasov.sparkexample.entity.Rating;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 import scala.Tuple2;
 
 import java.util.List;
 
 public class MoviesExample extends AbstractExample {
 
-    protected MoviesExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+    protected MoviesExample(String movieRatingsFilePath, String moviesFilePath, SparkDataMapper dataMapper) {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 

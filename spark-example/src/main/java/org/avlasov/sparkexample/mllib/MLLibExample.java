@@ -16,15 +16,15 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.avlasov.sparkexample.main.AbstractExample;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 
-import static org.avlasov.sparkexample.util.DataMapper.MOVIE_ID_COLUMN_NAME;
-import static org.avlasov.sparkexample.util.DataMapper.RATING_COLUMN_NAME;
-import static org.avlasov.sparkexample.util.DataMapper.USER_ID_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.MOVIE_ID_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.RATING_COLUMN_NAME;
+import static org.avlasov.util.DataMapper.USER_ID_COLUMN_NAME;
 
 public class MLLibExample extends AbstractExample {
 
-    protected MLLibExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+    protected MLLibExample(String movieRatingsFilePath, String moviesFilePath, SparkDataMapper dataMapper) {
         super(movieRatingsFilePath, moviesFilePath, dataMapper);
     }
 

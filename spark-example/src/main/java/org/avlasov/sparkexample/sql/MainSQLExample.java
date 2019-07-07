@@ -1,14 +1,14 @@
 package org.avlasov.sparkexample.sql;
 
 import org.apache.spark.sql.Row;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 
 import java.util.Map;
 
 public class MainSQLExample {
 
     public static void main(String[] args) {
-        SQLExample sqlExample = new SQLExample(args[0], args[1], new DataMapper());
+        SQLExample sqlExample = new SQLExample(args[0], args[1], new SparkDataMapper());
 
         Row[] popularMovies = sqlExample.findPopularMovies();
         Map<Integer, String> movies = sqlExample.readMovies();

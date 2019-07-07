@@ -3,7 +3,8 @@ package org.avlasov.sparkexample.mllib;
 import org.apache.spark.ml.recommendation.ALS;
 import org.apache.spark.sql.Row;
 import org.avlasov.sparkexample.sql.SQLExample;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
+import org.avlasov.util.DataMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,8 @@ import java.util.Map;
 public class MainMLLibExample {
 
     public static void main(String[] args) {
-        MLLibExample mlLibExample = new MLLibExample(args[0], args[1], new DataMapper());
-        SQLExample sqlExample = new SQLExample(args[0], args[1], new DataMapper());
+        MLLibExample mlLibExample = new MLLibExample(args[0], args[1], new SparkDataMapper());
+        SQLExample sqlExample = new SQLExample(args[0], args[1], new SparkDataMapper());
 
         Map<Integer, String> moviesData = mlLibExample.readMovies();
         int userID = Integer.parseInt(args[2]);

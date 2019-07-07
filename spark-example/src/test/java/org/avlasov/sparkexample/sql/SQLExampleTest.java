@@ -2,7 +2,8 @@ package org.avlasov.sparkexample.sql;
 
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
+import org.avlasov.util.DataMapper;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Assert;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class SQLExampleTest {
 
-    private SQLExample sqlExample = new SQLExample( "../data/movie-ratings.txt", "../data/movie-data.txt", new DataMapper());
+    private SQLExample sqlExample = new SQLExample( "../data/movie-ratings.txt", "../data/movie-data.txt", new SparkDataMapper());
 
     @Test
     public void findPopularMovie() {

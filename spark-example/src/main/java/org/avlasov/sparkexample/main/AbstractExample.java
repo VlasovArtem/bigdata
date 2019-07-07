@@ -1,7 +1,7 @@
 package org.avlasov.sparkexample.main;
 
 import org.apache.spark.api.java.JavaSparkContext;
-import org.avlasov.sparkexample.util.DataMapper;
+import org.avlasov.sparkexample.util.SparkDataMapper;
 import scala.Tuple2;
 
 import java.util.Map;
@@ -10,9 +10,9 @@ public abstract class AbstractExample {
 
     protected final String movieRatingsFilePath;
     protected final String moviesFilePath;
-    protected final DataMapper dataMapper;
+    protected final SparkDataMapper dataMapper;
 
-    protected AbstractExample(String movieRatingsFilePath, String moviesFilePath, DataMapper dataMapper) {
+    protected AbstractExample(String movieRatingsFilePath, String moviesFilePath, SparkDataMapper dataMapper) {
         this.movieRatingsFilePath = movieRatingsFilePath;
         this.moviesFilePath = moviesFilePath;
         this.dataMapper = dataMapper;
