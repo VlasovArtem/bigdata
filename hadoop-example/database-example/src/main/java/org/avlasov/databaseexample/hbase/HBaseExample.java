@@ -1,4 +1,4 @@
-package org.avlasov.hadoopexample.datastoresexample.hbase;
+package org.avlasov.databaseexample.hbase;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;

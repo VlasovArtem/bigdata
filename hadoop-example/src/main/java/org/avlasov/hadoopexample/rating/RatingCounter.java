@@ -1,4 +1,4 @@
-package org.avlasov.hadoopexample.counter.rating;
+package org.avlasov.hadoopexample.rating;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;

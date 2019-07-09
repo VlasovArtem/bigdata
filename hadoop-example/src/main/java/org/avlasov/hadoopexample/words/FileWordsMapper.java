@@ -1,4 +1,4 @@
-package org.avlasov.hadoopexample.counter.words;
+package org.avlasov.hadoopexample.words;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.io.LongWritable;

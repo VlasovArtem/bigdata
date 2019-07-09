@@ -1,4 +1,4 @@
-package org.avlasov.hadoopexample.counter.words;
+package org.avlasov.hadoopexample.words;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;

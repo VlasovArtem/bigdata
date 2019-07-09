@@ -2,4 +2,8 @@ rootProject.name = 'bigdata'
 include 'hadoop-example'
 include 'spark-example'
 include 'common'
+include 'hadoop-example:query-engine-example'
+findProject(':hadoop-example:query-engine-example')?.name = 'query-engine-example'
+include 'hadoop-example:database-example'
+findProject(':hadoop-example:database-example')?.name = 'database-example'
 

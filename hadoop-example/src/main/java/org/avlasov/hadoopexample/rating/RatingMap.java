@@ -1,4 +1,4 @@
-package org.avlasov.hadoopexample.counter.rating;
+package org.avlasov.hadoopexample.rating;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
