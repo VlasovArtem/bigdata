@@ -46,7 +46,7 @@ Main class: org.avlasov.sparkexample.cassandra.MainCassandraExample
 
 Run with spark-submit
 ```shell script
-spark-submit --packages datastax:spark-cassandra-connector:2.0.0-M2-s_2.11 --class org.avlasov.sparkexample.cassandra.MainCassandraExample spark-example-1.0-SNAPSHOT.jar ./ml-100k/u.data ./ml-100k/u.item ./ml-100k/u.user
+spark-submit --packages datastax:spark-cassandra-connector:2.3.1-s_2.11,commons-configuration:commons-configuration:1.10 --class org.avlasov.sparkexample.cassandra.MainCassandraExample spark-example-1.0-SNAPSHOT.jar ./ml-100k/u.data ./ml-100k/u.item ./ml-100k/u.user
 ```
 
 # Apache Spark and MongoDB

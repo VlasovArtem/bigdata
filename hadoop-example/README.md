@@ -1,6 +1,63 @@
 # Hadoop
 Is the platform the is provides distribute file system (HDFS) and distribute data processing. The hadoop is storing data in blocks in different nodes. Hadoop has NamedNode - node that contains all information about where blocks of data is store and on what node (Hadoop can contains only on NamedNode), and DataNode (multiple) - contains block of data and replicas of another DataNodes. All this and more are manages by Hadoop. Hadoop is providing MapReduce to distribute data processing.
 
+[Hadoop File System Commands](https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html#ls)
+
+## How to install Hadoop on Local Mac
+Example for Hadoop 3.1.2
+
+* Make sure that **brew** is installed
+* Install hadoop ```brew install hadoop```
+* Verify that current java version is Java 8 ```echo $(/usr/libexec/java_home --version 1.7+)```
+* Configure connection to localhost via SSH
+    1. Use in shell ```ssh localhost``` if this command return message **Last login:...** then you ok.
+    2. Enable remote login ```sudo systemsetup -setremotelogin on``` and try to execute #1, if not ok go forward.
+    3. Generate ssh keys ```ssh-keygen -t rsa```
+    4. Add new key to authorized key ```cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys``` try to execute #1
+* Go to hadoop config folder (example ```/usr/local/Cellar/Hadoop/<version>/libexec/etc/hadoop``` or find linked path with command ```echo $(brew --prefix hadoop)```)
+    * Update file hadoop-env.sh with next properties:
+        * ```export JAVA_HOME=$JAVA_HOME```
+        * ```export HADOOP_OPTS="-Djava.net.preferIPv4Stack=true"```
+    * Update core-site.xml
+    ```xml
+      <configuration>
+          <property>
+              <name>hadoop.tmp.dir</name>
+              <value>/usr/local/Cellar/hadoop/hdfs/tmp</value>
+              <description>A base for other temporary directories.</description>
+          </property>
+          <property>
+              <name>fs.default.name</name>
+              <value>hdfs://localhost:8020</value>
+          </property>
+      </configuration>
+    ```
+    * Update mapred-site.xml
+    ```xml
+      <configuration>
+          <property>
+              <name>mapred.job.tracker</name>
+              <value>localhost:8021</value>
+          </property>
+      </configuration>
+    ```
+    * Update hdfs-site.xml
+    ```xml
+      <configuration>
+          <property>
+              <name>dfs.replication</name>
+              <value>1</value>
+          </property>
+      </configuration>
+    ```
+* Run shell command to format name node ```hdfs namenode -format```
+* Launch hadoop ```/usr/local/Cellar/Hadoop/<version>/sbin/start-all.sh```
+* Go to ```http://localhost:9870```
+On the web page make sure that DataNode successfully starts ```http://localhost:9870/dfshealth.html#tab-datanode```. One DataNode should be available. If is no started check logs http://localhost:9870/logs/ for datanode.
+ 
+Possible problems
+* ClusterId in NameNode and DataNodes not matching https://stackoverflow.com/questions/22316187/datanode-not-starts-correctly
+
 ## How to execute Hadoop Job
 1. Build hadoop-example module - ```gradle clean build```
 2. Copy jar to an HDFS
@@ -15,7 +72,9 @@ Test data can be found by the link https://grouplens.org/datasets/ (ml-100k.zip)
 ## Hadoop Distribute File System (HDFS)
 
 ## YARN (Yet Another Resource Negotiator)
-Manages where and how resource are manages
+Introduces in Hadoop 2. Separates the problem of managing resources on your cluster from MapReduce. Enabled development of MapReduce alternatives (Spark, Tez) build on top of YARN. Special scheduler that is managing recourse to run different application (MapReduce, Tez, Spark).
+
+MapReduce, Tez, Spark -> YARN -> HDFS
 
 ### Materials
 #### Links
@@ -154,6 +213,55 @@ https://hortonworks.com/tutorial/learning-the-ropes-of-the-hortonworks-sandbox/
 ## Apache Hive
 Is translates SQL queries to MapReduce or Tez jobs on your cluster. The framework is translating SQL to the MapReduce or Tez commands. Running on the top of Hadoop YARN. SQL commands will be broken on map and reduce commands and then figure out how to execute them.
 
+### How to install on local machine mac
+
+Hadoop is required
+
+* Make sure that **brew** is installed
+* Install hadoop ```brew install hive```
+* Verify that current java version is Java 8 ```echo $(/usr/libexec/java_home --version 1.7+)```
+* Go to hive config folder (example ```/usr/local/Cellar/hive/<version>/libexec/conf``` or find linked path with command ```echo $(brew --prefix hadoop)```)
+* Copy hive-default.xml.template as hive-site.xml
+* Update following properties in hive-site.xml
+```xml
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:mysql://localhost/metastore?createDatabaseIfNotExist=true</value>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <value>com.mysql.jdbc.Driver</value>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionUserName</name>
+  <value>(YOUR MYSQL USERNAME)</value>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionPassword</name>
+  <value>(YOUR MYSQL PASSWORD)</value>
+</property>
+```
+* Download [MySQL JDBC](https://mvnrepository.com/artifact/mysql/mysql-connector-java/6.0.6) connect to the ```/usr/local/Cellar/hive/<version>/libexec/libs```
+* Follows step for adding required folders to the hadoop cluster https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-RunningHive
+* Run init script for MySQL ```schematool -dbType <db type> -initSchema``` (you can add --verbose if you face with issues)
+* Run Thrift server if ```hive.metastore.local = false``` in hive-site.xml ```hive --service metastore -p 9084```
+* Run ```hive``` or ```beeline -u jdbc:hive2://```
+
+Debug hive start ```hive -hiveconf hive.root.logger=DEBUG,console```
+
+How to enable Hive transactions https://stackoverflow.com/questions/42669171/semanticexception-error-10265-while-running-simple-hive-select-query-on-a-tran
+
+If have [problems with Timezones](https://stackoverflow.com/questions/26515700/mysql-jdbc-driver-5-1-33-time-zone-issue) during schema initialization, try to match this property in hive-site.xml
+```xml
+<property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:mysql://localhost/metastore?createDatabaseIfNotExist=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</value>
+  </property>
+```
+
 ### Why Hive?
 1. Use familiar SQL syntax (HiveQL)
 2. Interactive
@@ -164,6 +272,7 @@ Is translates SQL queries to MapReduce or Tez jobs on your cluster. The framewor
     * User defined functions
     * Thrift server
     * JDBC/ODBC driver
+
 ### Why not Hive?
 1. High latency - not appropriate for OLTP (online transaction processing). Because it works with MapReduce and Tez (disk latency).
 2. Stores data de-normalized
@@ -188,9 +297,12 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE;
 
-LOAD DATA LOCAL INPATH '${env:HOME}/ml-100k/u.data'
+LOAD DATA LOCAL INPATH './ml-100k/u.data' 
 OVERWRITE INTO TABLE ratings;
 ```
+
+**/home/hive/ml-100l/u.data** - complete path to the file
+
 **LOAD DATA** - moves data from a distribute filesystem into Hive
 **LOAD DATA LOCAL** - copies data from local filesystem into Hive
 
@@ -273,16 +385,34 @@ Create Table with transaction properties
 CREATE TABLE ratings ( userID INT, movieID INT, rating INT, ratingTime INT) STORED AS ORC TBLPROPERTIES ("transactional"="true");
 ```
 
-# Ambari
+External Table (or table type **EXTERNAL_TABLE**). Hive shell find **Table Type:**
+```
+DESC FORMATTED <table_name>
+```
 
-# Superset
+Select Grant for the table
+```
+show grant on table test;
+```
+Select grant for the table and user
+```
+show grant user hive on table test;
+```
 
-## Configure Hive
+Create table and copy data between tables
+```hiveql
+CREATE TABLE movieNamesTemp (movieID INT, name String, releaseDate String) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' STORED AS TEXTFILE;
+CREATE TABLE movieNames (movieID INT, name String, releaseDate String);
+LOAD DATA LOCAL INPATH '/home/hive/ml-100k/u.item' OVERWRITE INTO TABLE movieNamesTemp;
+insert overwrite table movieNames select * from movieNamesTemp;
+```
+
+### Configure Hive
 
 [Website](https://docs.hortonworks.com/HDPDocuments/HDP3/HDP-3.1.0/integrating-hive/content/hive_visualizing_hive_data_using_superset.html)
 [PDF](https://docs.hortonworks.com/HDPDocuments/HDP3/HDP-3.0.1/integrating-hive/hive_integrating_hive_and_bi.pdf)
 
-### Hot wo get Hive link for Superset
+#### Hot wo get Hive link for Superset
 Example of the link
 ```hive://hive@c7402:10000/default```
 Where **c7402** is name node, name of the node can be found with help command line:
@@ -294,7 +424,29 @@ Where **c7402** is name node, name of the node can be found with help command li
 
 Probably it can be found in **Ambari** in YARN Heatmap tab.
 
+# Apache Ranger
+Security framework for different application on Hadoop. For example for Hive
+
+Possible URL http://localhost:6080/index.html#!/policymanager/resource
+ 
+Admin password on Hortonworks
+
+* login: admin
+* password: hortonworks1
+
 # Materials
 https://sundog-education.com/hadoop-materials/
 
+# Hortonworks links and passwords
+HDP 3.0.2
+
+|Name|Login|Password|
+|---|---|---|
+|mysql|root|hortonworks1|
+|Ambari Admin|admin|Configure with script **admin-password-reset**|
+|Ambari maria_dev|maria_dev|maria_dev|
+
+|Link|Description|
+|---|---|
+|http://sandbox-hdp.hortonworks.com:8088|Job Tracker|
  

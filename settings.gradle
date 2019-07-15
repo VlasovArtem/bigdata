@@ -6,4 +6,6 @@ include 'hadoop-example:query-engine-example'
 findProject(':hadoop-example:query-engine-example')?.name = 'query-engine-example'
 include 'hadoop-example:database-example'
 findProject(':hadoop-example:database-example')?.name = 'database-example'
+include 'hadoop-example:cluster-manager-example'
+findProject(':hadoop-example:cluster-manager-example')?.name = 'cluster-manager-example'
 
