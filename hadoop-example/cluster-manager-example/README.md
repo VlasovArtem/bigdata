@@ -169,7 +169,7 @@ Monitor progress via http ```http://127.0.0.1:11000/oozie```
 ## Oozie Bundles
 New in Oozie 3.0. A bundle is a collection of coordinators that can be managed together. Example: you may have a bunch of coordinators for processing log data in various ways. By grouping them in a bundle, youc could suspend them all if there were some problem with log collection.
 
-## Example
+## Example (Stacks on Hive execution)
 Run SQL script on MySQL on Hadoop cluster:
 1. ```set names 'utf8;'```
 2. ```set character set utf8;```
@@ -224,3 +224,129 @@ If UI is not working
 3. Move it to the folder ```/usr/hdp/current/oozie-client/libext/``` on Hadoop Local
 4. Regenerate oozie war 
 5. Start oozie
+
+# Apache Zeppelin
+It is a notebook for your big data. It is allow interactively run scripts / code against your data. Can interleave with nicely formatted notes. Can share notebooks with others on the cluster.
+
+Apache Zeppelin has Apache Spark integration. You can run Spark code interactively (like in Spark shell). It can speeds up development cycle and allows easy experimentation and exploration of your big data. It can execute SQL queries directly against SparkSQL. Query results may be visualized in chart and graphs.
+
+Apache Zeppelin has a lot of interpreters to work with different big data frameworks, for example: Apache HBase, Cassandra, Hive, HDFS, etc.
+
+## Examples
+
+Markdown example
+```markdown
+%md
+### Let's make sure Spark is working first!
+Lets's see what version we're working with.
+```
+
+Interact with pre installed spark context
+```
+sc.version
+```
+
+Interact with shell commands. 
+
+If you have no such interpreter, try find it in the list of available interpreters, click on gear on note page. If is not there, create ones. Go to menu (user name on the top right) -> Interpreter -> Create.
+
+Input name **sh** and select Interpreter group **sh**, click **Save**. Do not forget to select this interpreter in your note.
+```
+%sh 
+
+whoami
+
+wget http://media.sundog-soft.com/hadoop/ml-100k/u.data -O /tmp/u.data
+wget http://media.sundog-soft.com/hadoop/ml-100k/u.item -O /tmp/u.item
+echo "Downloaded!"
+```
+
+If you have problem with ```wget: unable to resolve host address```
+
+Try to update ```/etc/resolv.conf``` with next line ```nameserver 8.8.8.8```
+
+Move files to HDFS
+```
+%sh
+
+hadoop fs -rm -r -f /tmp/ml-100k
+
+hadoop fs -mkdir /tmp/ml-100k
+
+hadoop fs -put /tmp/u.data /tmp/ml-100k/
+hadoop fs -put /tmp/u.item /tmp/ml-100k/
+
+hadoop fs -ls /tmp/ml-100k
+```
+
+Read ratings with Spark and Scala
+```
+final case class Rating(movieID: Int, rating: Int)
+
+val lines = sc.textFile("hdfs:///tmp/ml-100k/u.data").map(x => {val fields = x.split("\t"); Rating(fields(1).toInt, fields(2).toInt)})
+```
+
+Create DataFrame object from read lines.
+```
+import sqlContext.implicits._
+val ratingsDF = lines.toDF()
+
+ratingsDF.printSchema()
+```
+
+Group movies by number of ratings
+```
+val topMoviesID = ratingsDF.groupBy("movieID").count().orderBy(desc("count")).cache()
+topMoviesID.show()
+```
+
+Register Temp table
+```
+ratingsDF.registerTempTable("ratings")
+```
+
+Use SQL to select data from register table
+```
+%sql
+
+SELECT * from ratings LIMIT 10
+```
+
+More complex SQL from temp table
+```
+%sql
+
+SELECT rating, COUNT(*) as count FROM ratings GROUP BY rating
+```
+
+Create Movie Data Frame from data on HDFS, and register as temp table
+```
+final case class Movie(movieID: Int, title: String)
+
+val lines = sc.textFile("hdfs:///tmp/ml-100k/u.item").map(x => {val fields = x.split('|'); Movie(fields(0).toInt, fields(1))})
+
+import sqlContext.implicits._
+val moviesDF = lines.toDF()
+
+moviesDF.show()
+
+moviesDF.registerTempTable("titles")
+```
+
+Find top rated movies
+```
+%sql
+
+SELECT t.title, COUNT(*) cnt from ratings r JOIN titles t ON r.movieID = t.movieID GROUP BY t.title ORDER BY cnt DESC LIMIT 20
+```
+
+Example of the note above can be found by the path "./zeppelin-example/Playing with movielens.json"
+
+# HUE
+Hadoop User Experience
+
+Hue is alternative of Ambari from Hortonworks on Cloudera.
+
+Hue has build in oozie, spark, pig, hive, hbase, etc.
+
+[Web site](http://gethue.com/)
