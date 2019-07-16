@@ -3,7 +3,7 @@ package org.avlasov.sparkexample.streaming;
 public class StreamingExampleWithUrlCountMain {
 
     public static void main(String[] args) throws InterruptedException {
-        StreamingExample streamingExample = new StreamingExample();
+        StreamingExample streamingExample = new StreamingExample(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         streamingExample.readLogsWithRequestUrlCount();
     }
 

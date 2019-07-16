@@ -22,13 +22,19 @@ import java.util.regex.Pattern;
 public class StreamingExample implements Serializable {
 
     private final Pattern logPattern;
+    private final Duration batchDuration;
+    private final Duration slideDuration;
+    private final Duration windowDuration;
 
-    public StreamingExample() {
+    public StreamingExample(long batchIntervalSeconds, int slideIntervalSeconds) {
         this.logPattern = Pattern.compile("(?<host>([0-9]{1,3}\\.){3}[0-9]{1,3}\\S) (\\S+) (?<user>\\S+) \\[(?<time>.*)\\] \"(?<requestMethod>\\w+) (?<requestUrl>.*) (?<requestEnd>.*)\" (?<status>[0-9]+) (?<size>\\S+) \"(?<refer>.*)\" \"(?<agent>.*)\"");
+        batchDuration = Duration.apply(TimeUnit.SECONDS.toMillis(batchIntervalSeconds));
+        slideDuration = Duration.apply(TimeUnit.SECONDS.toMillis(slideIntervalSeconds));
+        windowDuration = Duration.apply(TimeUnit.MINUTES.toMillis(5));
     }
 
     public void readLogsWithRequestUrlCount() throws InterruptedException {
-        JavaStreamingContext javaStreamingContext = getStreamingContext(Duration.apply(TimeUnit.SECONDS.toMillis(1)));
+        JavaStreamingContext javaStreamingContext = getStreamingContext();
 
         JavaReceiverInputDStream<SparkFlumeEvent> flumeStream = FlumeUtils.createStream(javaStreamingContext, "localhost", 9092);
 
@@ -38,8 +44,8 @@ public class StreamingExample implements Serializable {
                 .map(logRecord -> logRecord.getRequest().getUrl())
                 .mapToPair(refer -> Tuple2.apply(refer, 1))
                 .reduceByKeyAndWindow(Integer::sum, (v1, v2) -> v1 - v2,
-                        Duration.apply(TimeUnit.MINUTES.toMillis(5)),
-                        Duration.apply(TimeUnit.SECONDS.toMillis(1)))
+                        windowDuration,
+                        slideDuration)
                 .transform(logPair -> logPair.map(v1 -> v1).sortBy(Tuple2::_2, false, 1))
                 .mapToPair(tuple2 -> tuple2);
 
@@ -51,9 +57,7 @@ public class StreamingExample implements Serializable {
     }
 
     public void readLogsWithStatusCount() throws InterruptedException {
-        Duration duration = Duration.apply(TimeUnit.SECONDS.toMillis(5));
-
-        JavaStreamingContext javaStreamingContext = getStreamingContext(duration);
+        JavaStreamingContext javaStreamingContext = getStreamingContext();
 
         JavaReceiverInputDStream<SparkFlumeEvent> flumeStream = FlumeUtils.createStream(javaStreamingContext, "localhost", 9092);
 
@@ -63,8 +67,8 @@ public class StreamingExample implements Serializable {
                 .map(LogRecord::getStatus)
                 .mapToPair(refer -> Tuple2.apply(refer, 1))
                 .reduceByKeyAndWindow(Integer::sum, (v1, v2) -> v1 - v2,
-                        Duration.apply(TimeUnit.MINUTES.toMillis(5)),
-                        duration)
+                        windowDuration,
+                        slideDuration)
                 .transform(logPair -> logPair.map(v1 -> v1).sortBy(Tuple2::_2, false, 1))
                 .mapToPair(tuple2 -> tuple2);
 
@@ -75,7 +79,7 @@ public class StreamingExample implements Serializable {
         javaStreamingContext.awaitTermination();
     }
 
-    private JavaStreamingContext getStreamingContext(Duration batchDuration) {
+    private JavaStreamingContext getStreamingContext() {
         SparkSession sparkSession = getSparkSession();
         SparkContext sparkContext = sparkSession.sparkContext();
         sparkContext.setLogLevel("INFO");

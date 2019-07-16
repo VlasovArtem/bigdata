@@ -123,12 +123,10 @@ New data just keeps getting appended to it. Your continuous application keeps qu
 2. Update Flume configuration file:
     * a1.sources.r1.spoolDir - path to the local dir
 3. Run Flume Agent ```bin/flume-ng agent --conf conf --conf-file ~/Documents/flume/sparkstreamingflume.conf --name a1 -Dflume.root.logger=INFO,console```
-4. Run Spark ```spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.4.3 --class org.avlasov.sparkexample.streaming.StreamingExampleWithUrlCountMain ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar```
+4. Run Spark ```spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.4.3 --class org.avlasov.sparkexample.streaming.StreamingExampleWithUrlCountMain ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar 1 1```
 5. Copy file ```hadoop-example/streaming-example/flume/access_log.txt``` into **a1.sources.r1.spoolDir**
 
 Check results.
-
-spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.4.3 --class org.avlasov.sparkexample.streaming.StreamingExampleWithStatusCountMain ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar
 
 # How execute Spark example
 1. Build spark-example module ```gradle clean build```
