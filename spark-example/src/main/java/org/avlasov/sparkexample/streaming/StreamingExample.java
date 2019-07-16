@@ -61,7 +61,7 @@ public class StreamingExample implements Serializable {
 
         JavaReceiverInputDStream<SparkFlumeEvent> flumeStream = FlumeUtils.createStream(javaStreamingContext, "localhost", 9092);
 
-        JavaPairDStream<Integer, Integer> urlCounts = flumeStream.map(v1 -> new String(v1.event().getBody().array()))
+        JavaPairDStream<Integer, Integer> statusCounts = flumeStream.map(v1 -> new String(v1.event().getBody().array()))
                 .map(this::toLogRecord)
                 .filter(Objects::nonNull)
                 .map(LogRecord::getStatus)
@@ -72,7 +72,7 @@ public class StreamingExample implements Serializable {
                 .transform(logPair -> logPair.map(v1 -> v1).sortBy(Tuple2::_2, false, 1))
                 .mapToPair(tuple2 -> tuple2);
 
-        urlCounts.print();
+        statusCounts.print();
 
         javaStreamingContext.checkpoint("/Users/artemvlasov/Documents/flume/checkpoint");
         javaStreamingContext.start();
