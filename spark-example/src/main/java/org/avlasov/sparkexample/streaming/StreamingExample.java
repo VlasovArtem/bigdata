@@ -82,7 +82,7 @@ public class StreamingExample implements Serializable {
     private JavaStreamingContext getStreamingContext() {
         SparkSession sparkSession = getSparkSession();
         SparkContext sparkContext = sparkSession.sparkContext();
-        sparkContext.setLogLevel("INFO");
+        sparkContext.setLogLevel("ERROR");
         StreamingContext streamingContext = new StreamingContext(sparkContext, batchDuration);
         return new JavaStreamingContext(streamingContext);
     }
