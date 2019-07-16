@@ -98,7 +98,7 @@ The window "slides" as time goes on, to represent batches within the window inte
 2. Slide interval - is how ofter a windowed transformation is computed
 3. Window interval - is how far back in time the windowed transformation goes
  
-![DStream example]()
+![DStream example](https://github.com/VlasovArtem/bigdata/blob/develop/image/apache-spark-dstream.png)
  
 Each batch contains one second of data (the batch interval)
  
