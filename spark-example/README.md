@@ -59,6 +59,76 @@ Run with spark-submit
 spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.11:2.4.1 --class org.avlasov.sparkexample.mongodb.MainMongoDBExample ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar ./data/movie-ratings.txt ./data/movie-data.txt ./data/users.txt
 ```
 
+# Spark Streaming
+
+* Analyze data streams in real time, instead of in huge batch jobs daily
+* Analyzing streams of web log data to react to use behavior
+* Analyze streams of real-time sensor data for "Internet of Things" stuff
+
+![Apache Spark Streaming](https://beyondcorner.com/wp-content/uploads/2017/12/microbatch.png)
+
+Processing of RDD's (batches of processed data) can happen in parallel on different worker nodes.
+
+## DStreams (Discretized Streams)
+![DStreams](https://d2h0cx97tjks2p.cloudfront.net/blogs/wp-content/uploads/sites/2/2017/06/apache-spark-dstream-1.jpg)
+
+* Generates the RDD's for each time step, and can produce output at each time step.
+* Can be transformed and acted on in much the same way as RDD's
+* Or you can access their underlying RDD's if you need them. 
+
+Common stateless transformations on DStream
+* Map
+* Flatmap
+* Filter
+* reduceByKey
+
+Stateful data
+
+You can also maintain a long-lived state on a DStream. For example - running totals, broken down by keys, or aggregating session data in web activity.
+
+### Windowed Transformations (Windowing)
+
+Allow you to compute results across a longer time period that your batch interval. 
+
+Example: top sellers from the past hour. You might process data every one second (the batch interval), but maintain a window of one hour.
+ 
+The window "slides" as time goes on, to represent batches within the window interval.
+ 
+1. Batch interval - is how often data is captured into a DStream
+2. Slide interval - is how ofter a windowed transformation is computed
+3. Window interval - is how far back in time the windowed transformation goes
+ 
+![DStream example]()
+ 
+Each batch contains one second of data (the batch interval)
+ 
+We set up a window interval of 3 seconds and a slide interval of 2 seconds
+ 
+## Structured streaming
+
+![Structured streaming](https://spark.apache.org/docs/latest/img/structured-streaming-example-model.png)
+
+New data just keeps getting appended to it. Your continuous application keeps querying updated data as it comes in.
+
+* Streaming code looks a lot like the equivalent non-streaming code.
+* Structured data allows Spark to represent data more efficiently
+* SQL-style queries allows for query optimization opportunities - and even better performance.
+* Interoperability with other Spark components based on DataSets. MLLib is also moving toward DataSets as its primary API.
+* DataSets in general is the direction Spark is moving.
+
+## Example
+
+### Read and parse log files throw flume to spark
+1. Copy Flume configuration file ```hadoop-example/streaming-example/flume/configuration/sparkstreamingflume.conf```
+2. Update Flume configuration file:
+    * a1.sources.r1.spoolDir - path to the local dir
+3. Run Flume Agent ```bin/flume-ng agent --conf conf --conf-file ~/Documents/flume/sparkstreamingflume.conf --name a1 -Dflume.root.logger=INFO,console```
+4. Run Spark ```spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.4.3 --class org.avlasov.sparkexample.streaming.StreamingExampleWithUrlCountMain ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar```
+5. Copy file ```hadoop-example/streaming-example/flume/access_log.txt``` into **a1.sources.r1.spoolDir**
+
+Check results.
+
+spark-submit --packages org.apache.spark:spark-streaming-flume_2.11:2.4.3 --class org.avlasov.sparkexample.streaming.StreamingExampleWithStatusCountMain ./spark-example/build/libs/spark-example-1.0-SNAPSHOT.jar
 
 # How execute Spark example
 1. Build spark-example module ```gradle clean build```

@@ -52,7 +52,8 @@ Example for Hadoop 3.1.2
     ```
 * Run shell command to format name node ```hdfs namenode -format```
 * Launch hadoop ```/usr/local/Cellar/Hadoop/<version>/sbin/start-all.sh```
-* Go to ```http://localhost:9870```
+* Go to http://localhost:9870
+
 On the web page make sure that DataNode successfully starts ```http://localhost:9870/dfshealth.html#tab-datanode```. One DataNode should be available. If is no started check logs http://localhost:9870/logs/ for datanode.
  
 Possible problems

@@ -8,4 +8,6 @@ include 'hadoop-example:database-example'
 findProject(':hadoop-example:database-example')?.name = 'database-example'
 include 'hadoop-example:cluster-manager-example'
 findProject(':hadoop-example:cluster-manager-example')?.name = 'cluster-manager-example'
+include 'hadoop-example:streaming-example'
+findProject(':hadoop-example:streaming-example')?.name = 'streaming-example'
 
