@@ -118,3 +118,5 @@ Update file ```hadoop-example/streaming-example/flume/configuration/flumelogs.co
 Run flume agent ```bin/flume-ng agent --conf conf --conf-file ~/Documents/flume/flumelogs.conf --name a1 -Dflume.root.logger=INFO,console```
 
 Upload file into **a1.sources.r1.spoolDir** and check if it's available in HDFS (a1.sinks.k1.hdfs.path) with required name (check configurations)
+
+# Apache Storm

@@ -27,3 +27,10 @@ MapReduce vs Apache Spark Comparison Table
 |Interactive Mode|Not Interactive|Interactive|
 |Infrastructure|Commodity Hardware’s|Mid to High-level Hardware’s|
 |SQL|Supports through Hive Query Language|Supports through Spark SQL|
+
+# CAP 
+* Consistency - all nodes see the same data at the same time
+* Availability - every request gets a response (success of failure)
+* Partition tolerance - system works despite of network failures
+
+![alt text](http://java-questions.com/img/cap-theorem.png "CAP")
