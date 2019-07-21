@@ -79,6 +79,27 @@ If **--from-beginning** is not setup, then consumer will read only new messages
 
 * Create consumer ```./kafka-console-consumer.sh --bootstrap-server sandbox-hdp.hortonworks.com:6667 --topic log-test```
 
+### Spark and Kafka example
+
+1. Start zookeeper server ```./bin/zkServer config/zookeeper.properties```
+2. Set kafka listener in **config/server.properties** ```listeners=PLAINTEXT://localhost:9092```
+3. Start kafka server ```./bin/kafka-server-start.sh config/server.properties```
+4. Create kafka topics
+    * ```./kafka-topics.sh --create --zookeeper sandbox-hdp.hortonworks.com:2181 --replication-factor 1 --partitions 1 --topic test```
+    * ```./kafka-topics.sh --create --zookeeper sandbox-hdp.hortonworks.com:2181 --replication-factor 1 --partitions 1 --topic Ex```
+5. Build fat jar ```mvn clean assembly:assembly```
+6. Run Kafka Producer ```java -jar target/spark-app-1.0-SNAPSHOT-jar-with-dependencies.jar "localhost:9092" test```
+    * Where:
+        * **"localhost:9092"** is bootstrap sever from step #2
+        * **test** is name of the topic
+    * To check topic data, run simple console consumer ```kafka-console-consumer --bootstrap-server localhost:9092 --topic test```
+7. Run Spark ```spark-submit --packages "org.apache.spark:spark-streaming-kafka-0-10_2.11:2.4.3","org.apache.kafka:kafka-clients:2.3.0" --class org.avlasov.kafka.SparkKafkaMain target/spark-app-1.0-SNAPSHOT.jar "localhost:9092" test Ex```
+    * Where:
+        * **"localhost:9092"** is bootstrap sever from step #2
+        * **test** is name of the consumer topic
+        * **Ex** is name of the Spark producer topic
+    * To check topic data, run simple console consumer ```kafka-console-consumer --bootstrap-server localhost:9092 --topic Ex```
+
 # Apache Flume
 Made from the start with Hadoop in mind. Has build-in sinks for HDFS and HBase. Originally made to handle log aggregation. 
 
