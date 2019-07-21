@@ -11,6 +11,12 @@ import java.util.List;
 
 public class UserVisits implements Serializable {
 
+    private final String master;
+
+    public UserVisits(String master) {
+        this.master = master;
+    }
+
     public List<Tuple2<String, Integer>> findTop10CountriesByVisit(String path) {
         SparkSession sparkSession = getSparkSession();
         try (JavaSparkContext javaSparkContext = new JavaSparkContext(sparkSession.sparkContext())) {
@@ -30,7 +36,7 @@ public class UserVisits implements Serializable {
     private SparkSession getSparkSession() {
         return SparkSession
                 .builder()
-                .master("local[*]")
+                .master(master)
                 .appName("User Visits example")
                 .getOrCreate();
     }
@@ -51,8 +57,8 @@ public class UserVisits implements Serializable {
     }
 
     public static void main(String[] args) {
-        UserVisits userVisits = new UserVisits();
-        List<Tuple2<String, Integer>> top10CountriesByVisit = userVisits.findTop10CountriesByVisit(args[0]);
+        UserVisits userVisits = new UserVisits(args[0]);
+        List<Tuple2<String, Integer>> top10CountriesByVisit = userVisits.findTop10CountriesByVisit(args[1]);
 
         for (Tuple2<String, Integer> countryCodeVisitsTuple : top10CountriesByVisit) {
             System.out.printf("Country code: %s, Visits: %d%n", countryCodeVisitsTuple._1(), countryCodeVisitsTuple._2());

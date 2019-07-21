@@ -42,7 +42,7 @@ public class StreamingExample implements Serializable {
                 .map(this::toLogRecord)
                 .filter(Objects::nonNull)
                 .map(logRecord -> logRecord.getRequest().getUrl())
-                .mapToPair(refer -> Tuple2.apply(refer, 1))
+                .mapToPair(refer -> new Tuple2<>(refer, 1))
                 .reduceByKeyAndWindow(Integer::sum, (v1, v2) -> v1 - v2,
                         windowDuration,
                         slideDuration)

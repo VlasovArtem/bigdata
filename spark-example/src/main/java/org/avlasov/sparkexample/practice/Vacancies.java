@@ -14,6 +14,12 @@ import static org.apache.spark.sql.functions.when;
 
 public class Vacancies {
 
+    private final String master;
+
+    public Vacancies(String master) {
+        this.master = master;
+    }
+
     public List<Row> averageSalaryByProfessionAndCity(String headHuntersJsonFilePath) {
         SparkSession sparkSession = getSparkSession();
         sparkSession.sparkContext().setLogLevel("ERROR");
@@ -35,7 +41,7 @@ public class Vacancies {
     private SparkSession getSparkSession() {
         return SparkSession
                 .builder()
-                .master("local[*]")
+                .master(master)
                 .appName("User Visits example")
                 .getOrCreate();
     }
@@ -58,9 +64,12 @@ public class Vacancies {
     }
 
     public static void main(String[] args) {
-        Vacancies vacancies = new Vacancies();
+        Vacancies vacancies = new Vacancies(args[0]);
 
-        System.out.println(vacancies.averageSalaryByProfessionAndCity(args[0]));
+        List<Row> rows = vacancies.averageSalaryByProfessionAndCity(args[1]);
+        for (Row row : rows) {
+            System.out.println(row);
+        }
     }
 
 }

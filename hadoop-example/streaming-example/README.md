@@ -14,6 +14,17 @@ Kafka itself may be distributed among many processes on many servers. It will di
 
 Consumer may also be distributed. Consumers of the same group will have messages distributed amongst them. Consumers of different groups will get their own copy of each message.
 
+Start zookeeper server
+```zookeeper-server-start config/zookeeper.properties``` - with brew
+```./bin/zkServer config/zookeeper.properties```
+
+Update ```config/server.properties``` for kafka
+* listeners=PLAINTEXT://localhost:9092
+
+Start kafka server
+```kafka-server-start config/server.properties``` - with brew
+```./bin/kafka-server-start.sh config/server.properties``` 
+
 ## Examples
 
 ### Simple console producer and consumer example
