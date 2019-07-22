@@ -10,4 +10,5 @@ include 'hadoop-example:cluster-manager-example'
 findProject(':hadoop-example:cluster-manager-example')?.name = 'cluster-manager-example'
 include 'hadoop-example:streaming-example'
 findProject(':hadoop-example:streaming-example')?.name = 'streaming-example'
+include 'other-example'
 

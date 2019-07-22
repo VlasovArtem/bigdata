@@ -1,0 +1,2 @@
+# Impala
+Cloudera's alternative to Hive. Massive parallel SQL engine on Hadoop. Impala is always running, so you avoid the start-up costs when starting a Hive query (Made for BI-style queries). Bottom line: Impala is often faster than Hive, but Hive offers more versatility (variety).
