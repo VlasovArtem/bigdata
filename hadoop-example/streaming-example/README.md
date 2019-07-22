@@ -152,3 +152,66 @@ Run flume agent ```bin/flume-ng agent --conf conf --conf-file ~/Documents/flume/
 Upload file into **a1.sources.r1.spoolDir** and check if it's available in HDFS (a1.sinks.k1.hdfs.path) with required name (check configurations)
 
 # Apache Storm
+
+https://storm.apache.org/
+
+Another framework for processing continuous streams of data on a cluster. Can run on top of YARN. Works on individual events, not micro-batches (like Spark Streaming does).
+
+A _stream_ consists of _tuples_ that flow through to system. _Spouts_ that are sources of stream data (Kafka, Twitter, etc.). _Bolts_ that process stream data as it's received (Transform, aggregate, write to database/HDFS). A _topology_ is a graph of spouts and bolts process your stream.
+
+![Apache Bolt](https://2xbbhjxc6wk3v21p62t8n4d4-wpengine.netdna-ssl.com/wp-content/uploads/2018/03/storm-100_topology.png)
+
+![Architecture](https://andyleonard.blog/wp-content/uploads/2018/01/StormArchitectureAWSSlide-1024x560.jpg)
+
+Developing storm application can be developed with Storm Core or Trident
+
+## Start on local environment
+1. Start zookeeper
+2. Start nimbus `./bin/storm nimbus`
+3. Start supervisor `./bin/storm supervisor`
+4. (Optional) Start Storm UI `./bin storm ui`
+    * Check `http://localhost:8080/`
+5. Execute topology wordcount `./bin/storm jar examples/storm-starter/target/storm-starter-2.0.0.jar org.apache.storm.starter.WordCountTopology wordcount`
+6. Check Apache Storm UI `http://localhost:8080/`, that this UI contains topology `wordcount`
+
+Kill topology `./bin/storm kill wordcount`
+
+# Apache Flink
+
+Another stream processing engine. Most similar to Storm. Con run on standalone cluster, or on top of YARN or Mesos. Highly scalable. Fault-tolerant
+
+**Flink vs. Spark Streaming vs. Storm**
+
+1. Flink is faster than Storm
+2. Flink offers "real streaming" link Storm (but if you are using Trident with Storm, you are using micro-batches)
+3. Flink offers a higher-level API like Trident or Spark, but while still doing real-time streaming
+4. Flink has good Scala support, like Spark Streaming
+5. Flink has an ecosystem of its own, like Spark 
+6. Flink can process data based on event times, not when data was received
+    * Impressive windowing system
+    * This plus real-time streaming and exactly-once semantics is important for financial applications.
+    
+![Apache Flink Architecture](https://static.packt-cdn.com/products/9781786466228/graphics/image_01_002.jpg)
+
+**Connectors**
+
+HDFS, Cassandra, Kafka, Elasticsearch, NiFi, Redis, RabbitMQ
+
+**Stark flink cluster**
+
+1. Download or install Apache Flink
+2. Go to bin folder
+3. Run `start-cluster.sh`
+4. Check UI `http://localhost:8081`
+
+Run Flink example
+
+For example [Socket Word Count](https://github.com/apache/flink/blob/master/flink-examples/flink-examples-streaming/src/main/java/org/apache/flink/streaming/examples/socket/SocketWindowWordCount.java)
+
+You can find example in archive of the app.
+
+1. Run netcat `nc -l 9000`
+2. Run Flink `./bin/flink run examples/streaming/SocketWindowWordCount.jar`
+3. Check UI `http://localhost:8081/#/overview` that it has running jobs (job name: Socket Window WordCount)
+4. Input words in netcat window
+5. Check logs for input `./log` (*.out)
